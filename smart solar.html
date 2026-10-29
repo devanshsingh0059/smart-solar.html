@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Solar Energy Monitor</title>
+<style>
+body{font-family:Arial;margin:0;background:#f2f7f5;text-align:center;color:#18312a}
+header{background:#16803c;color:white;padding:22px 10px}
+.dashboard{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;padding:20px}
+.card{background:white;width:190px;padding:18px;border-radius:12px;box-shadow:0 3px 10px #0002}
+.value{font-size:25px;font-weight:bold}
+.panel{background:white;max-width:400px;margin:10px auto;padding:20px;border-radius:12px}
+input{width:85%;padding:12px;margin:8px;font-size:16px}
+button{background:#16803c;color:white;border:0;padding:12px 20px;border-radius:8px}
+#result{margin-top:15px;font-weight:bold}
+</style>
+</head>
+<body>
+
+<header>
+<h1>☀️ Smart Solar Energy Monitor</h1>
+<p>Energy Monitoring Dashboard</p>
+</header>
+
+<div class="dashboard">
+<div class="card">☀️ Solar Generation<div class="value" id="sd">0 kWh</div></div>
+<div class="card">🏠 Home Consumption<div class="value" id="hd">0 kWh</div></div>
+<div class="card">⚡ Grid Import<div class="value" id="id">0 kWh</div></div>
+<div class="card">🔄 Grid Export<div class="value" id="ed">0 kWh</div></div>
+</div>
+
+<div class="panel">
+<h2>Enter Energy Data</h2>
+<p>Solar Generation (kWh)</p>
+<input type="number" id="solar" min="0" placeholder="Example: 10">
+<p>Home Consumption (kWh)</p>
+<input type="number" id="home" min="0" placeholder="Example: 6">
+<br><br>
+<button onclick="calculateEnergy()">Calculate Energy</button>
+<div id="result">Enter values to begin.</div>
+</div>
+
+<script>
+function calculateEnergy(){
+ let a=document.getElementById("solar").value;
+ let b=document.getElementById("home").value;
+
+ if(a===""||b===""){
+  document.getElementById("result").textContent="Enter both values.";
+  return;
+ }
+
+ let solar=Number(a),home=Number(b);
+
+ if(!Number.isFinite(solar)||!Number.isFinite(home)||solar<0||home<0){
+  document.getElementById("result").textContent="Enter valid non-negative numbers.";
+  return;
+ }
+
+ let gridImport=Math.max(home-solar,0);
+ let gridExport=Math.max(solar-home,0);
+
+ document.getElementById("sd").textContent=solar+" kWh";
+ document.getElementById("hd").textContent=home+" kWh";
+ document.getElementById("id").textContent=gridImport+" kWh";
+ document.getElementById("ed").textContent=gridExport+" kWh";
+
+ if(gridExport>0){
+  document.getElementById("result").textContent=
+  "Grid ko "+gridExport+" kWh electricity bheji jayegi.";
+ }else if(gridImport>0){
+  document.getElementById("result").textContent=
+  "Grid se "+gridImport+" kWh electricity li jayegi.";
+ }else{
+  document.getElementById("result").textContent=
+  "Solar generation aur home consumption equal hain.";
+ }
+}
+</script>
+
+</body>
+</html>
